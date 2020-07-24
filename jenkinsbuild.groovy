@@ -55,9 +55,13 @@ def slavePodTemplate = """
                 stage("Docker Push") {
                   sh "docker push beckkari8/artemis:${branch.replace('version/', 'v')}"                     
                 }
-                stage("trigger Deploy"){
-                  build 'artemis-deploy'
-                } 
+                stage("Trigger Deploy") {
+                  build 'artemis-deploy', 
+                  parameters: [
+                      [$class: 'BooleanParameterValue', name: 'terraformApply',      value: true],
+                      [$class: 'StringParameterValue',  name: 'environment',         value: "dev"]
+                      ]
+                }
                          
             }
         } 
