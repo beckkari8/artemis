@@ -43,7 +43,7 @@ def slavePodTemplate = """
             checkout scm
         }
         container("docker"){
-             dir ('deployments\docker'){
+             dir ('deployments/docker'){
                 stage("Docker Build") {                
                     sh "docker build -t beckkari8/artemis:${branch.replace('version/', 'v')}  ."
                 }
