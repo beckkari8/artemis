@@ -45,16 +45,20 @@ def slavePodTemplate = """
         container("docker"){
              dir ('deployments/docker'){
                 stage("Docker Build") {                
-                    sh "docker build -t beckkari8/artemis:${branch.replace('version/', 'v')}  ."
+                  sh "docker build -t beckkari8/artemis:${branch.replace('version/', 'v')}  ."
                 }
                 stage("Docker Login") {
-                    withCredentials([usernamePassword(credentialsId: 'docker-hub-creds', passwordVariable: 'password', usernameVariable: 'username')]) {
-                    sh "docker login --username ${username} --password ${password}"
+                  withCredentials([usernamePassword(credentialsId: 'docker-hub-creds', passwordVariable: 'password', usernameVariable: 'username')]) {
+                  sh "docker login --username ${username} --password ${password}"
                         }
                 }
                 stage("Docker Push") {
-                    sh "docker push beckkari8/artemis:${branch.replace('version/', 'v')}"                     
+                  sh "docker push beckkari8/artemis:${branch.replace('version/', 'v')}"                     
                 }
+                stage("trigger Deploy"){
+                  build 'artemis-deploy'
+                } 
+                         
             }
         } 
       }
