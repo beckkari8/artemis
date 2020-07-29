@@ -74,7 +74,7 @@ def slavePodTemplate = """
                 withCredentials([usernamePassword(credentialsId: "aws-access-${environment}", 
                     passwordVariable: 'AWS_SECRET_ACCESS_KEY', usernameVariable: 'AWS_ACCESS_KEY_ID')]) {
                     println("Selected cred is: aws-access-${environment}")
-                    sh '/scripts/Dockerfile/set-config.sh'
+                    sh 'sh /scripts/Dockerfile/set-config.sh'
                     stage("Terraform Apply/plan") {
                         if (!params.terraformDestroy) {
                             if (params.terraformApply) {
