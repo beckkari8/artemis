@@ -1,8 +1,15 @@
-provider "aws" {}
-resource "aws_instance" "jenkins" {
-  ami           = "ami-0f24a0c4ab962365f"
-  instance_type = "t2.micro"
-  tags = {
-    Name = "Jenkins"
+module "artemis-deploy" {
+  source  = "fuchicorp/chart/helm"
+  deployment_name        = "artemis"
+  deployment_environment = "${var.environment}"
+  deployment_endpoint    = "none" 
+  deployment_path        = "artemis"
+  template_custom_vars  = {     
+    deployment_image     = "${var.deployment_image}"    
   }
+}
+variable "environment" {
+}
+variable "deployment_image" {
+  default = "beckkari8/artemis:master"
 }
