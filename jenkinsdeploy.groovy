@@ -67,7 +67,6 @@ def slavePodTemplate = """
             """.stripIndent()
             writeFile file: 'deployment_configuration.tfvars', text: "${deployment_configuration_tfvars}"
             sh 'cat deployment_configuration.tfvars >> dev.tfvars'
-            sh '/scripts/Dockerfile/set-config.sh'
           }   
         }
         container("buildtools") {
@@ -75,6 +74,7 @@ def slavePodTemplate = """
                 withCredentials([usernamePassword(credentialsId: "aws-access-${environment}", 
                     passwordVariable: 'AWS_SECRET_ACCESS_KEY', usernameVariable: 'AWS_ACCESS_KEY_ID')]) {
                     println("Selected cred is: aws-access-${environment}")
+                    sh '/scripts/Dockerfile/set-config.sh'
                     stage("Terraform Apply/plan") {
                         if (!params.terraformDestroy) {
                             if (params.terraformApply) {
